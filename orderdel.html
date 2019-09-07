@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<link rel="stylesheet" href="css/home.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			html{background:#f3f3f3;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+		    .main{font-size:0.28rem;}
+		    .myMsg{background:url(img/order-btm.png) no-repeat left 1.36rem #fff;padding:0.3rem;height:1.4rem;box-sizing: border-box;margin-bottom:10px;background-size:7.5rem 0.04rem;}
+		    .uname{margin-bottom:0.1rem;}
+		    .uname span{margin-right:0.36rem;}
+		    .myMsg p{font-size: 0.26rem;color:#999;}
+		    .goodspe{height:0.76rem;border-bottom:1px solid #f3f3f3;background:#fff;padding:0 0.3rem}
+		    .goodspe h3{line-height:0.9rem;font-size:0.28rem;font-weight:normal}
+		    .goodspe span{line-height:1rem;font-size:0.26rem;color:#F7675C;}
+			.main ul li{background: #fff;height:1.68rem;padding:0.21rem 0.3rem;border-bottom:0.1rem solid #f3f3f3;box-sizing: border-box;}
+			.main ul li img{width:1.21rem;}
+		    .goodsInfo{width:5.1rem;margin-left:0.1rem;}
+		    .goodsInfo>span{display:block;line-height:0.4rem;}
+		    .goodsInfo>span i{color:#F7675C;font-size:0.28rem;}
+		    .ordermsg{padding:0.3rem;color:#999;background:#fff;}
+		    .ordermsg p{line-height:0.4rem;}
+		</style>
+	</head>
+	<body>
+		<div id="orderde">	
+			<div class="header">
+				<h1>订单详情</h1>
+				<span class="backicon"></span>
+			</div>
+			<div class="main">
+				<div class="myMsg">
+					<div class="uname">
+						<span>姓名：{{orderdel.name}}</span>
+						<span class="uphone">{{orderdel.phone}}</span>
+					</div>
+					<p>{{orderdel.address}}</p>
+				</div>
+				<div class="goodspe">
+					<h3 class="fl">{{orderdel.normal_good_type}}</h3>
+					<span class="fr">{{orderdel.status}}</span>
+				</div>
+				<ul>
+					<li>
+						<img :src="domain+orderdel.normal_good_image" alt="" class="fl" />
+						<div class="fl goodsInfo">
+							<span>{{orderdel.normal_good_title}}</span>
+							<span><i>{{orderdel.normal_good_price}}</i></span>
+						</div>
+					</li>
+				</ul>
+				<div class="ordermsg">
+					<p>订单运费：包邮</p>
+					<p>下单时间：{{orderdel.create_at}}</p>
+				</div>
+			</div>
+		</div>
+		<script>
+			new Vue({
+				el:"#orderde",
+				data:{
+					orderdel:"",
+					domain:""
+				},
+				methods:{
+					
+				},
+				mounted:function(){
+					var that=this
+					that.domain=domain
+					mui.plusReady(function(){
+						var self=plus.webview.currentWebview();//获取页面传值
+                        that.$http.get(domain+"/api/app/normalGoodOrderOne?id="+self.current).then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res)
+				                if(res.data.errorCode==0){
+				                	that.orderdel=res.data.result
+				                }
+				            },function (res) {
+				            // 处理失败的结果
+				            //alert(res) 
+				            }
+				        ) 
+					})
+					
+				}
+			})
+		</script>
+	</body>
+</html>

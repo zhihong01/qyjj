@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			html{background:#f3f3f3;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+		    .main{font-size:0.28rem;}
+		    .main{font-size:0.28rem;}  
+		    .h-nav{display:flex;justify-content: space-around;flex-wrap: nowrap;text-align:center;background:#fff;padding:0.34rem 0 0.3rem;}
+		    .h-nav img{width:0.9rem;}
+		    .h-nav span{display:block;}
+		    .goodsList,.gdgoods{padding:0 0.3rem 0 0.3rem;background:#fff;margin-top:0.1rem;}
+		    .goodsList h3,.gdgoods h3{line-height:0.6rem;}
+		    .goodsList li{overflow:hidden;padding-top:0.3rem;position: relative;padding-bottom:0.26rem;border-bottom:1px solid #f3f3f3;}
+		    .goodsList li img{width:1.48rem;height:1.34rem;}
+		    .goodsList .goodsInfo{margin-left:0.1rem;}
+		    .goodsInfo p{padding-top:0.05rem;width:4rem;overflow: hidden;text-overflow:ellipsis;height:0.73rem;}
+		    .goodsInfo span{display:block;color:#999;font-size:0.2rem;line-height:0.34rem;}
+		    .goodsInfo span.price{font-size: 0.26rem;font-weight:bold;color:#F7675C;margin-top:0.26rem;}
+		    .goodsList li button{position:absolute;bottom:0.45rem;background:#F7675C;border:0;outline: none;width:1.28rem;height:0.4rem;color:#fff;border-radius:0.2rem;font-size:0.2rem;}
+		    
+		</style>
+	</head>
+	<body>
+		<div id="gdzq">
+			<div class="header">
+				<h1>{{tit.title}}</h1>
+				<span class="backicon"></span>
+			</div>
+			<div class="main">
+				<div class="goodsList">
+					<ul>
+						<li v-for="(item,index) in goodslist">
+							<img :src="item.image" class="fl"/>
+							<div class="goodsInfo fl">
+								<p>{{item.title}}</p>
+								<span class="price">{{item.price}}</span>
+								<!--<span>库存剩余1500</span>-->
+								
+							</div>
+							<button class="fr" @tap="jumpdel(index)">立即购买</button>
+						</li>
+						
+					</ul>
+				</div>
+				
+			</div>
+			
+		</div>
+		<script>
+		
+	   		new Vue({
+		    	el:"#gdzq",
+		    	data:{
+		    		goodslist:"",
+		    		tit:""
+		    	},
+		    	methods:{
+		    		jumpdel:function(gIndex){
+		    			localStorage.setItem("sp",2)
+		    			openurl_can("goodsInfo",this.goodslist[gIndex].id)
+		    		}
+		    	},
+		    	updated:function(){
+					
+				},
+				created:function(){
+					var that=this;
+					mui.plusReady(function(){
+						var self=plus.webview.currentWebview();//获取页面传值
+                         //alert(self.current);
+                         that.$http.get(domain+"/api/app/normalGoodList?normal_good_type_id="+self.current).then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res.data.errorCode)
+				               if(res.data.errorCode==0){
+				                	that.goodslist=res.data.result 
+				                } 
+				            },function (res) {
+				            // 处理失败的结果
+				            //alert(res) 
+				            }
+				        );
+				        that.$http.get(domain+"/api/app/normalGoodName?normal_good_type_id="+self.current).then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res.data.errorCode)
+				               if(res.data.errorCode==0){
+				                	that.tit=res.data.result 
+				                } 
+				            },function (res) {
+				            // 处理失败的结果
+				            //alert(res) 
+				            }
+				        );
+					})
+				},
+				mounted:function(){
+					
+	
+				}
+	   		});
+		</script>
+		
+	</body>
+</html>

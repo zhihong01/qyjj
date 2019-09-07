@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			html{background:#f3f3f3;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+		    .main{font-size:0.28rem;}
+		    .main .alter-nav{height:0.8rem;line-height:0.8rem;color:#666;font-size:0.28rem;margin-bottom:0.1rem ;}
+		    .main .alter-nav li{float:left;width:25%;text-align:center;height:0.8rem;background-color:#fff;}
+		    .on{background: url(img/botm.png) no-repeat center 0.7rem;background-size:0.5rem 0.03rem;color:#F7675C;}
+		    .main .cont li{height:0.87rem;line-height:0.87rem;padding:0 0.3rem;background-color:#fff;border-bottom: 1px solid #f3f3f3;}
+		    .per-info span{float:right;display:block;width:4.28rem;text-align:right;color:#999;}
+		    .per-info span.addr{line-height:0.42rem;}
+		    .alter-sub{text-align:center;margin:0.8rem;}
+		    .alter-sub button{width:4.72rem;height:0.8rem;color:#fff;background: #F7675C;border:0;outline: none;border-radius: 0.1rem;font-size:0.3rem;}
+		    .main .cont input{height:0.86rem;border:none;line-height:0.86rem;text-align:right;}
+		    .cont textarea{width:80%;display:block;margin:0.3rem auto;height:1rem;resize: none;}
+		</style>
+	</head>
+	<body>
+		<div id="alterzl">
+			<div class="header">
+				<h1>修改资料</h1>
+				<span class="backicon"></span>
+			</div>
+			<div class="main">
+				<ul class="alter-nav">
+					<li :class="{'on':flag==index}" @tap="getsel(index)" v-for="(item,index) in alterinfo">{{item}}</li>
+					
+				</ul>
+				<div class="cont" v-if="flag==0">
+					<ul class="per-info">
+						<li>用户ID <span>{{perInfo.uid}}</span></li>
+						<li>推荐人ID <span>{{perInfo.up_uid}}</span></li>
+						<li>真实姓名 <span>{{perInfo.name}}</span></li>
+						<li>身份证 <span>{{perInfo.idcard}}</span></li>
+						<li>银行卡号 <span>{{perInfo.bank}}</span></li>
+						<li>支付宝 <span>{{perInfo.alipay}}</span></li>
+						<li>收货地址 <span class="addr">{{perInfo.rece_address}}</span></li>
+						<li>钱包余额 <span>{{perInfo.balance | addZero}}</span></li>
+					</ul>
+				</div>
+				<div class="cont" v-if="flag==1">
+					<ul>
+						<li>原登录密码：<input class="fr" type="text" placeholder="请输入原登录密码" v-model="opwd"/></li>
+						<li>新登录密码：<input class="fr" type="password" placeholder="请输入新密码" v-model="npwd"/></li>
+						<li>确认新密码：<input class="fr" type="password" placeholder="请再次输入新密码" v-model="ejpwd"/></li>
+					</ul>
+					<div class="alter-sub">
+						<button @tap="sublpwd">提交</button>
+					</div>
+				</div>
+				<div class="cont" v-if="flag==2">
+					<ul>
+						<li>原交易密码：<input class="fr" type="text" placeholder="请输入原登录密码" v-model="paypwd"/></li>
+						<li>新交易密码：<input class="fr" type="password" placeholder="请输入新密码" v-model="npaypwd"/></li>
+						<li>确认新密码：<input class="fr" type="password" placeholder="请再次输入新密码" v-model="epaypwd"/></li>
+					</ul>
+					<div class="alter-sub">
+						<button @tap="subjy">提交</button>
+					</div>
+				</div>
+				<div class="cont" v-if="flag==3">
+					<textarea cols="30" rows="10" placeholder="请输入新的收货地址" v-model="addr"></textarea>
+					<div class="alter-sub">
+						<button @tap="subadr">提交</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+		    
+	   		new Vue({
+		    	el:"#alterzl",
+		    	data:{
+		    		alterinfo:["个人资料","修改登录密码","修改交易密码","修改收货地址"],
+		    		num:1,
+		    		flag:0,
+		    		perInfo:"",
+		    		opwd:"",
+		    		npwd:"",
+		    		ejpwd:"",
+		    		paypwd:"",
+				    npaypwd:"",
+				    epaypwd:"",
+				    addr:""
+		    	},
+		    	methods:{
+		    		getsel:function(sIndex){
+		    			this.flag=sIndex;
+		    			
+		    		},
+		    		sublpwd:function(){
+		    			 this.$http.post(domain+"/api/app/modifyLoginPassword",{
+					      	login_password:this.opwd,
+					      	new_password:this.npwd,
+					      	again_password:this.ejpwd
+					      },{emulateJSON:true}).then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res.data.errorCode)
+				                if(res.data.errorCode==0){
+				                	mui.toast("修改成功！")
+				                }else{
+				                	mui.toast(res.data.errorMsg) ;
+				                }
+				            },function (res) {
+				            // 处理失败的结果
+				            mui.toast("发生未知错误")
+				            }
+				        ) 
+		    		},
+		    		subjy:function(){
+		    			this.$http.post(domain+"/api/app/modifyPayPassword",{
+					      	pay_password:this.paypwd,
+					      	new_password:this.npaypwd,
+					      	again_password:this.epaypwd
+					      },{emulateJSON:true}).then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res.data.errorCode)
+				                if(res.data.errorCode==0){
+				                	mui.toast("修改成功！")
+				                }else{
+				                	mui.toast(res.data.errorMsg) ;
+				                }
+				            },function (res) {
+				            // 处理失败的结果
+				            mui.toast("发生未知错误")
+				            }
+				        )
+		    		},
+		    		subadr:function(){
+		    			this.$http.post(domain+"/api/app/updateReceAddress",{
+					      	rece_address:this.addr
+					      },{emulateJSON:true}).then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res.data.errorCode)
+				                if(res.data.errorCode==0){
+				                	mui.toast("修改成功！")
+				                }else{
+				                	mui.toast(res.data.errorMsg) ;
+				                }
+				            },function (res) {
+				            // 处理失败的结果
+				            mui.toast("发生未知错误")
+				            }
+				        )
+		    		}
+		    	},
+		    	created:function(){
+		    		this.$http.get(domain+"/api/app/userData").then(
+			            function (res) {
+			                // 处理成功的结果
+			                if(res.data.errorCode==0){
+			                	this.perInfo=res.data.result
+			                }
+			            },function (res) {
+			            // 处理失败的结果
+			            //alert(res) 
+			            }
+			        );
+			       
+		    	}
+	   		});
+	   		
+		</script>
+		
+	</body>
+</html>

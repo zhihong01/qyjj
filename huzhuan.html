@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<link rel="stylesheet" href="css/home.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			html{background:#f3f3f3;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+		    .main{font-size:0.28rem;}
+		    .main .cont li{height:0.87rem;line-height:0.87rem;padding:0 0.3rem;background:#fff;border-bottom: 1px solid #f3f3f3;}
+		    .main .cont li span{width:1.74rem;display: block;float:left;}
+		    .alter-sub{text-align:center;margin:1.2rem;}
+		    .alter-sub button{width:4.72rem;height:0.8rem;color:#fff;background: #F7675C;border:0;outline: none;border-radius: 0.1rem;font-size:0.3rem;}
+		    .main .cont input{height:0.86rem;border:none;line-height:0.86rem;margin-left:0.2rem;float:left;}
+		    .zrzc{height:0.86rem;background:#fff;margin-bottom:0.1rem;overflow:hidden;}
+		    .zrzc li{float:left;width:50%;text-align:center;line-height:0.86rem;}
+		    .zrzc li.on{background:url(img/botm.png) no-repeat center 0.76rem;background-size:0.5rem 0.03rem;color: #F7675C;font-size:0.28rem;}
+		    .zhuanList{background:#fff;}
+		    .zhuanList li{height:1.32rem;padding:0.3rem;box-sizing: border-box;border-bottom: 1px solid #f3f3f3;}
+		    .zhuanList li img{width:0.71rem;}
+		    .zhuanList ul{height:5.4rem;overflow-y:auto;}
+		    .z-info{width:4rem;float:left;}
+		    .z-info span{display:block;font-size:0.24rem;color:#b5b5b5;line-height:0.35rem}
+		    .z-info span:first-child{font-size:0.28rem;margin-left:0.1rem;color:#333;}
+		    .jhm{margin-top:0.15rem;}
+		</style>
+	</head>
+	<body>
+		<div id="huzhuan">
+		    <div class="header">
+				<h1>互转</h1>
+				<span class="backicon"></span>
+			</div>
+			<div class="main">
+				<div class="cont">
+					<ul>
+						<li><span>被转帐号：</span><input type="text" placeholder="请输入被转账号/ID" v-model="intouid"/></li>
+						<li><span>激活码：</span><input type="text" placeholder="请输入激活码" /></li>
+						<li><span>激活码数量：</span><input type="text" placeholder="转出激活码数量" v-model="codenum"/></li>
+					</ul>
+					<div class="alter-sub">
+						<button @tap="subjh">提交</button>
+					</div>
+				</div>
+				<ul class="zrzc">
+					<li :class="{on:flag==1}" @tap="zrsel">转入</li>
+					<li :class="{on:flag==2}" @tap="zcsel">转出</li>
+				</ul>
+				<div class="zhuanList">
+					<ul v-if="flag==1">
+						<li v-for="(item1,index) in zrInfo">
+							<img src="img/head.png" alt="" class="fl"/>
+							<div class="z-info">
+								<span>转入用户ID：{{item1.out_uid}}</span>
+								<span>转入时间：{{item1.create_at}}</span>
+							</div>
+							<span class="fr jhm">激活码 {{item1.act_code_num}}</span>
+						</li>
+					</ul>
+					<ul v-else>
+						<li v-for="(item2,index) in zcInfo">
+							<img src="img/head.png" alt="" class="fl"/>
+							<div class="z-info">
+								<span>转出用户ID：{{item2.into_uid}}</span>
+								<span>转出时间：{{item2.create_at}}</span>
+							</div>
+							<span class="fr jhm">激活码 {{item2.act_code_num}}</span>
+						</li>
+					</ul>
+				</div>
+			</div>	
+		</div>
+		<script>
+			new Vue({
+				el:"#huzhuan",
+				data:{
+					flag:1,
+					intouid:"",
+					codenum:"",
+					zrInfo:"",
+					zcInfo:""
+				},
+				methods:{
+					zrsel:function(){
+						this.flag=1;
+					},
+					zcsel:function(){
+						this.flag=2;
+					},
+					subjh:function(){
+					    this.$http.post(domain+"/api/app/userTurnCode",{
+					      	into_uid:this.intouid,
+					      	act_code_num:this.codenum
+					      },{emulateJSON:true}).then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res.data.errorCode)
+				                if(res.data.errorCode==0){
+				                	mui.toast("转码成功！")
+				                	this.$http.get(domain+"/api/app/outActCode").then(
+							            function (res) {
+							                // 处理成功的结果
+							                console.log(res.data.errorCode)
+							                
+							               if(res.data.errorCode==0){
+							                	this.zcInfo=res.data.result
+							                	
+							                } 
+							            },function (res) {
+							            // 处理失败的结果
+							            //alert(res) 
+							            }
+							        )
+				                }else{
+				                	mui.toast(res.data.errorMsg) ;
+				                }
+				            },function (res) {
+				            // 处理失败的结果
+				            mui.toast("发生未知错误")
+				            }
+				        ) 	
+					}
+				},
+				created:function(){
+					this.$http.get(domain+"/api/app/intoActCode").then(
+			            function (res) {
+			                // 处理成功的结果
+			               if(res.data.errorCode==0){
+			                	this.zrInfo=res.data.result
+			               }  
+			            },function (res) {
+			            // 处理失败的结果
+			            //alert(res) 
+			            }
+			        );
+			        this.$http.get(domain+"/api/app/outActCode").then(
+			            function (res) {
+			                // 处理成功的结果
+			                console.log(res.data.errorCode)
+			                
+			               if(res.data.errorCode==0){
+			                	this.zcInfo=res.data.result
+			                	
+			                } 
+			            },function (res) {
+			            // 处理失败的结果
+			            //alert(res) 
+			            }
+			        )
+				}
+			})
+		</script>
+	</body>
+</html>

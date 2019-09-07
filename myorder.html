@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			html{background:#f3f3f3;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+		    .main{font-size:0.28rem;}
+		    .main .alter-nav{height:0.8rem;line-height:0.8rem;color:#666;font-size:0.28rem;margin-bottom:0.1rem ;}
+		    .main .alter-nav li{float:left;width:33.3%;text-align:center;height:0.8rem;background-color:#fff;}
+		    .on{background: url(img/botm.png) no-repeat center 0.7rem;background-size:0.5rem 0.03rem;color:#F7675C;}
+		    .orderlist li{background: #fff;height:1.68rem;padding:0.21rem 0.3rem;border-bottom:0.1rem solid #f3f3f3;box-sizing: border-box;}
+			.orderlist li img{width:1.21rem;}
+		    .orderInfo{width:5.1rem;margin-left:0.1rem;}
+		    .orderInfo>span{display:block;line-height:0.4rem;}
+		    
+		    .orderInfo>span i{color:#F7675C;font-size:0.28rem;}
+		</style>
+	</head>
+	<body>
+		<div id="myorder">
+			<div class="header">
+				<h1>我的订单</h1>
+				<span class="backicon"></span>
+			</div>
+			<div class="main">
+				<ul class="alter-nav">
+					<li :class="{'on':flag==index}" @tap="getsel(index)" v-for="(item,index) in alterinfo">{{item}}</li>
+					
+				</ul>
+				<ul class="orderlist" v-if="flag==0">
+					<li @tap="jumpodel(index)" v-for="(ord1,index) in orderinfo1">
+						<img :src="ord1.normal_good_image" alt="" class="fl" />
+						<div class="fl orderInfo">
+							<span>{{ord1.normal_good_title}}</span>
+							<span><i>{{ord1.status}}</i></span>
+						</div>
+					</li>
+				</ul>
+				<ul class="orderlist" v-if="flag==1">
+					<li @tap="jumpodel2(index)" v-for="(ord2,index) in orderinfo2">
+						<img :src="ord2.normal_good_image" alt="" class="fl" />
+						<div class="fl orderInfo">
+							<span>{{ord2.normal_good_title}}</span>
+							<span><i>{{ord2.status}}</i></span>
+						</div>
+					</li>
+				</ul>
+				<ul class="orderlist" v-if="flag==2">
+					<li @tap="jumpodel3(index)" v-for="(ord3,index) in orderinfo3">
+						<img :src="ord2.normal_good_image" alt="" class="fl" />
+						<div class="fl orderInfo">
+							<span>{{ord3.normal_good_title}}</span>
+							<span><i>{{ord3.status}}</i></span>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<script>
+		
+	   		new Vue({
+		    	el:"#myorder",
+		    	data:{
+		    		alterinfo:["已完成","待发货","待收货"],
+		    		num:1,
+		    		flag:0,
+		    		orderinfo1:"",
+		    		orderinfo2:0,
+		    		orderinfo3:"",
+		    		htp:"",
+		    		ticket:"",
+				    sign:""
+		    	},
+		    	methods:{
+		    		getsel:function(sIndex){
+		    			this.flag=sIndex;
+		    			
+		    		},
+		    		jumpodel:function(oIndex){
+		    			openurl_can("orderdel",this.orderinfo1[oIndex].id)
+		    		},
+		    		jumpodel2:function(oIndex){
+		    			openurl_can("orderdel",this.orderinfo2[oIndex].id)
+		    		},
+		    		jumpodel3:function(oIndex){
+		    			openurl_can("orderdel",this.orderinfo3[oIndex].id)
+		    		}
+		    	},
+		    	created:function(){
+		    		this.$http.get(domain+"/api/app/normalGoodOrder?status=0").then(
+			            function (res) {
+			                // 处理成功的结果
+			                console.log(res)
+			                if(res.data.errorCode==0){
+			                	this.orderinfo1=res.data.result
+			                }
+			            },function (res) {
+			            // 处理失败的结果
+			            //alert(res) 
+			            }
+			        ) 
+				    this.$http.get(domain+"/api/app/normalGoodOrder?status=1").then(
+			            function (res) {
+			                // 处理成功的结果
+			                console.log(res)
+			                if(res.data.errorCode==0){
+			                	this.orderinfo2=res.data.result
+			                }
+			            },function (res) {
+			            // 处理失败的结果
+			            //alert(res) 
+			            }
+			        ) 
+			        this.$http.get(domain+"/api/app/normalGoodOrder?status=2").then(
+			            function (res) {
+			                // 处理成功的结果
+			                console.log(res)
+			                if(res.data.errorCode==0){
+			                	this.orderinfo3=res.data.result
+			                }
+			            },function (res) {
+			            // 处理失败的结果
+			            //alert(res) 
+			            }
+			        )
+		    	}
+	   		});
+		</script>
+		
+	</body>
+</html>

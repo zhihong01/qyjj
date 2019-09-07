@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<link rel="stylesheet" href="css/home.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			.header{height:3.2rem;background:url(img/person01.jpg) no-repeat center center;background-size:100% 100%;font-size:0.28rem;color:#fff;padding-top:0.76rem;box-sizing: border-box;}
+			.mem-name,.mem-count{margin-left:1.92rem;line-height:;0.47rem;height:0.47rem;}
+			.main{background:#f3f3f3;font-size:0.28rem;padding:0.1rem 0 2.7rem 0;}
+			.main ul li{background: #fff;height:0.8rem;line-height:0.8rem;padding-left:0.3rem;border-bottom:1px solid #f3f3f3;}
+			.main ul li img{width:0.36rem;vertical-align: middle;}
+			.main ul li i{float:right;width:14px;height:100%;margin-right:0.3rem;background:url(img/arrow-right.png) no-repeat center center;background-size:0.13rem 0.22rem;}
+			.main ul{margin-top:0.1rem;}
+			.logout{margin-top:0.8rem;text-align:center;}
+			.logout button{width:4.74rem;height:0.8rem;border-radius: 0.1rem;border:2px solid #f7675c;outline:none;background:#f3f3f3;color:#F7675C;}
+		    .u-count{margin-right:0.1rem;}
+		    .footer{font-size:0.24rem;height:0.96rem;padding:0.1rem;box-sizing: border-box;position:fixed;bottom: 0;width:100%;background:#f3f3f3;}
+		    .footer ul li{float:left;width:33.3%;text-align:center;}
+		    .footer ul li img{height:0.37rem;}
+		    .footer ul li span{display:block;color:#cacaca;margin-top:0.02rem}
+		    .footer .act{color:#F7675C;}
+		</style>
+	</head>
+	<body>
+		<div id="per">	
+			<div class="header">
+				<div class="mem-name">会员姓名：<span>{{perInfo.name}}</span></div>
+				<div class="mem-count">会员账号：<span>{{perInfo.phone}}</span></div>
+			</div>
+			<div class="main">
+				<ul>
+					<li @tap="jumpact(1)">
+						<img src="img/per-icon_01.png"/><a href="javascript:;"> 总资产<i></i><span class="fr u-count">{{perInfo.all_balance|addZero}}</a></span>
+					</li>
+				</ul>
+				<ul>
+					<li @tap="jumpact(2)"><img src="img/per-icon_02.png"/><a href="javascript:;"> 我要充值<i></i></a></li>
+					<li @tap="jumpact(3)"><img src="img/per-icon_03.png"/><a href="javascript:;"> 我要提现<i></i></a></li>
+				</ul>
+				
+				<ul>
+					<li @tap="jumpact(4)"><img src="img/per-icon_04.png"/><a href="javascript:;"> 账单<i></i></a></li>
+					<li @tap="jumpact(5)"><img src="img/per-icon_05.png"/><a href="javascript:;"> 充值记录<i></i></a></li>
+					<li @tap="jumpact(6)"><img src="img/per-icon_06.png"/><a href="javascript:;"> 佣金记录<i></i></a></li>
+					<li @tap="jumpact(7)"><img src="img/per-icon_07.png"/><a href="javascript:;"> 激活码<i></i></a></li>
+					<li @tap="jumpact(8)"><img src="img/per-icon_08.png"/><a href="javascript:;"> 交易记录<i></i></a></li>
+					<li @tap="jumpact(9)"><img src="img/per-icon_09.png"/><a href="javascript:;"> 订单详情<i></i></a></li>
+				</ul>
+				<ul>
+					<li @tap="jumpact(10)"><img src="img/mem2.png"/><a href="javascript:;"> 我的团队<i></i></a></li>
+					<li @tap="jumpact(11)"><img src="img/per-icon_10.png"/><a href="javascript:;"> 我要提币<i></i></a></li>
+					<li @tap="jumpact(12)"><img src="img/per-icon_11.png"/><a href="javascript:;"> 个人资料<i></i></a></li>
+				</ul>
+				<div class="logout">
+					<button @tap="exit">退出登录</button>
+				</div>
+			</div>
+			<div class="footer">
+				<ul>
+					<li @tap="jumphome"><img src="img/home.png" alt="" /><span>千易国际</span></li>
+					<li @tap="jumptz"><img src="img/tongz.png" alt="" /><span>千易通证</span></li>
+					<li><img src="img/person01.png" alt="" /><span class="act">个人中心</span></li>
+				</ul>
+			</div>
+		</div>
+		<script>
+			new Vue({
+				el:"#per",
+				data:{
+					perInfo:""
+				},
+				methods:{
+					jumpact:function(jIndex){
+						switch (jIndex){
+							case 1:
+							    openurl("allcount");
+							    break;
+							case 2:
+							    openurl("chongzhi");
+							    break;
+							case 3:
+							    openurl("yetx");
+							    break;
+							case 4:
+							    openurl("qbjl");
+							    break;
+							case 5:
+							    openurl("czjl");
+							    break;
+							case 6:
+							    openurl("yjjl");
+							    break;
+							case 7:
+							    openurl("jihuoma");
+							    break;
+							case 8:
+							    openurl("jyjl");
+							    break;
+							case 9:
+							    openurl("myorder");
+							    break;
+							case 10:
+							    openurl("member");
+							    break;
+							case 11:
+							    openurl("getbi");
+							    break;
+							case 12:
+							    openurl("alter-msg");
+							    break;
+						}
+					},
+					jumphome:function(){
+						openurl("home");
+					},
+					jumptz:function(){
+						openurl("qytz");
+					},
+					exit:function(){
+						mui.plusReady(function(){
+							localStorage.clear(); 
+				    		plus.runtime.restart() 
+						})
+					}
+				},
+				created:function(){
+					this.$http.get(domain+"/api/app/userData").then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res)
+				                if(res.data.errorCode==0){
+				                	this.perInfo=res.data.result
+				                }
+				            },function (res) {
+				            // 处理失败的结果
+				            //alert(res) 
+				            }
+				        ) 
+				},
+				mounted:function(){
+					
+				}
+			})
+			//				exit.addEventListener("tap",function(){//退出登录
+//					mui.ajax(domain+"/user/logout?t="+ticket+"&sign="+sign,{
+//				    	dataType:"json",
+//				    	type:"post",
+//				    	timeout:10000,
+//				    	headers:{'Content-Type':'application/json'},
+//				    	success:function(data){	  
+//				    		if(data.code==1){
+////				    			alert("1")
+//				    			localStorage.clear(); 
+//				    			plus.runtime.restart()   
+//				    			
+//				    		}else if(data.code==0){
+//				    			mui.toast("退出失败，请稍后重试",{duration:"short"})
+//				    		}
+//				    	},
+//				    	error:function(xhr,type,errorThrown){
+////				    		alert(type)
+//				    	}
+//				    })
+//				})
+		</script>
+	</body>
+</html>

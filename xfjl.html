@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			html{background:#f3f3f3;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+		    .main{font-size:0.28rem;}
+		    .main .alter-nav{height:0.8rem;line-height:0.8rem;color:#666;font-size:0.28rem;margin-bottom:0.1rem ;}
+		    .main .alter-nav li{float:left;width:50%;text-align:center;height:0.8rem;background-color:#fff;}
+		    .on{background: url(img/botm.png) no-repeat center 0.7rem;background-size:0.5rem 0.03rem;color:#F7675C;}
+		    .qblist li{background: #fff;height:1.32rem;padding:0.3rem;border-bottom:0.1rem solid #f3f3f3;box-sizing: border-box;}
+			.qblist li img{width:0.72rem;}
+			.qblist li>span{color:#999;margin:0.15rem 0.2rem 0 0;}
+			.qblist li>span i{color:#F7675C;font-size:0.26rem;}
+		    .qbInfo{width:3.6rem;margin-left:0.1rem;}
+		    .qbInfo>span{display:block;line-height:0.4rem;}
+		    .qbInfo>span:last-child{color:#999;font-size:0.24rem;}
+		</style>
+	</head>
+	<body>
+		<div id="xfjl">
+			<div class="header">
+				<h1>消费钱包记录</h1>
+				<span class="backicon"></span>
+			</div>
+			<div class="main">
+				<ul class="alter-nav">
+					<li :class="{'on':flag==index}" @tap="getsel(index)" v-for="(item,index) in alterinfo">{{item}}</li>
+					
+				</ul>
+				<ul class="qblist" v-if="flag==0">
+					<li v-for="(xf,index) in xfjl">
+						<img src="img/qbjl.png" alt="" class="fl" />
+						<div class="fl qbInfo">
+							<span>{{xf.phone}}<i>{{xf.type}}</i></span>
+							<span>{{xf.create_at}}</span>
+						</div>
+						<span class="fr"><i>{{xf.money}}</i> 消费钱包</span>
+					</li>
+					
+				</ul>
+				<ul class="qblist" v-if="flag==1">
+					<li v-for="(zz,index) in zzjl">
+						<img src="img/qbjl.png" alt="" class="fl" />
+						<div class="fl qbInfo">
+							<span>{{zz.phone}} <i>{{zz.type}}</i></span>
+							<span>{{zz.create_at}}</span>
+						</div>
+						<span class="fr"><i>{{zz.money}}</i> 消费钱包</span>
+					</li>
+					
+				</ul>
+				
+			</div>
+		</div>
+		<script>
+		
+	   		new Vue({
+		    	el:"#xfjl",
+		    	data:{
+		    		alterinfo:["消费钱包记录","转账记录"],
+		    		num:1,
+		    		flag:0,
+		    		xfjl:"",
+		    		zzjl:"",
+				    sign:""
+		    	},
+		    	methods:{
+		    		getsel:function(sIndex){
+		    			this.flag=sIndex;
+		    			
+		    		}
+		    	},
+		    	created:function(){
+		    		this.$http.get(domain+"/api/app/consBalanceReflectList").then(
+			            function (res) {
+			                // 处理成功的结果
+			                console.log(res)
+			                if(res.data.errorCode==0){
+			                	this.xfjl=res.data.result
+			                }
+			            },function (res) {
+			            // 处理失败的结果
+			            //alert(res) 
+			            }
+			        ) 
+			        this.$http.get(domain+"/api/app/consBalanceTransfer").then(
+			            function (res) {
+			                // 处理成功的结果
+			                console.log(res)
+			                if(res.data.errorCode==0){
+			                	this.zzjl=res.data.result
+			                }
+			            },function (res) {
+			            // 处理失败的结果
+			            //alert(res) 
+			            }
+			        )
+		    	}
+	   		});
+		</script>
+		
+	</body>
+</html>

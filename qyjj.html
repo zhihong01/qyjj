@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<link rel="stylesheet" href="css/home.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style type="text/css">
+			html{background:#f3f3f3;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+		    .main{font-size:0.28rem;}
+		    .jjinfo{height:2.4rem;background:#F7675C;text-align:center;color:#fff;padding:0.4rem;line-height:0.52rem;box-sizing: border-box;font-size:0.26rem}
+		    .jjinfo h1{font-size:0.542999rem;}
+		    .syinfo{padding:0.25rem;height:1.24rem;background:#fff;box-sizing:border-box;margin-bottom:0.1rem;}
+		    .syinfo li{float:left;width:50%;text-align:center;box-sizing: border-box;color:#999;}
+		    .syinfo li:first-child{border-right:1px solid #ddd;}
+		    .syinfo li span{display:block;line-height:0.4rem;color:#333;}
+		    .qylc{height:2.6rem;background:#fff;padding:0.3rem;box-sizing: border-box;margin-bottom:0.1rem;}
+		    .qylc h3{font-size:0.26rem;margin-bottom:0.3rem;}
+		    .qylc li{float:left;text-align:center;margin-right:0.38rem;}
+		    .qylc li img{width:0.8rem;}
+		    .qylc li span{display:block;line-height:0.52rem;}
+		    .btnbox{text-align:center;margin-top:1rem;}
+		    .btnbox button{font-size:0.32rem;width:5.3rem;height:0.8rem;border-radius: 0.2rem;border:2px solid #F7675C;outline:none;margin-top:0.1rem;color:#F7675C;background:#f3f3f3;}
+		    .btnbox .on{background:#F7675C;color:#fff;border:0;}
+		</style>
+	</head>
+	<body>
+		<div id="qyjj">
+			<div class="header">
+				<h1>千易基金</h1>
+				<span class="backicon"></span>
+			</div>
+			<div class="main">
+				<div class="jjinfo">
+					<p>基金余额(QYBC)</p>
+					<h1>{{qyjjinfo.money | addZero}}</h1> 
+					<p>基金日利息{{qyjjinfo.jzrq}}%</p>
+				</div>
+				<ul class="syinfo">
+					<li>累计收益(QYBC) <span>{{qyjjinfo.all_balance | addZero}}</span></li>
+					<li>今日收益(QYBC) <span>{{qyjjinfo.today_balance | addZero}}</span></li>
+				</ul>
+				<div class="qylc">
+					<h3>千易理财</h3>
+					<ul>
+						<li @tap="jumpsy"><img src="img/qy01.png" alt="" /><span>收益记录</span></li>
+						<li @tap="jumpintro"><img src="img/qy02.png" alt="" /><span>基金介绍</span></li>
+					</ul>
+				</div>
+				<div class="qylc">
+					<h3>千易理财</h3>
+					<ul>
+						<li @tap="jumpcy(1)"><img src="img/33.png" alt="" /><span>南非创业实投1</span></li>
+						<li @tap="jumpcy(2)"><img src="img/44.png" alt="" /><span>南非创业实投2</span></li>
+						<li @tap="jumpcy(3)"><img src="img/55.png" alt="" /><span>南非创业实投3</span></li>
+					</ul>
+				</div>
+				<div class="btnbox">
+					<button @tap="jumpzr" class="zrbtn on">转入</button>
+					<button class="zcbtn" @tap="jumpzc">转出</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			new Vue({
+				el:"#qyjj",
+				data:{
+					qyjjinfo:""
+				},
+				methods:{
+					jumpsy:function(){
+						openurl("syjl"); 
+					},
+					jumpintro:function(){
+						openurl("jjintro");
+					},
+					jumpzr:function(){
+						openurl("qyzr");
+					},
+					jumpzc:function(){
+						openurl("qyzc");
+					},
+					jumpcy:function(tIndex){ 
+						openurl_can("cyjj",tIndex);  
+					}
+				},
+				created:function(){
+					this.$http.get(domain+"/api/app/qyzjList").then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res)
+				                if(res.data.errorCode==0){
+				                	this.qyjjinfo=res.data.result
+				                }
+				            },function (res) {
+				            // 处理失败的结果
+				            //alert(res) 
+				            }
+				        ) 
+				}
+			})
+		</script>
+	</body>
+</html>

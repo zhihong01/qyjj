@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<link rel="stylesheet" href="css/home.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			html{background:#f3f3f3;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+		    .main{font-size:0.28rem;}
+		    .main .cont li{height:0.87rem;line-height:0.87rem;padding:0 0.3rem;background:#fff;border-bottom: 1px solid #f3f3f3;}
+		    .main .cont li span{width:2rem;display: block;float:left;}
+		    .alter-sub{text-align:center;margin:0.8rem;}
+		    .alter-sub button{width:4.72rem;height:0.8rem;color:#fff;background: #F7675C;border:0;outline: none;border-radius: 0.1rem;font-size:0.3rem;}
+		    .main .cont input{height:0.86rem;width:4.50rem;border:none;line-height:0.86rem;float:left;}
+		    .getlogo{float:right;}
+		    .main .cont .bz{height:1.6rem;line-height:0.8rem;}
+		    .main .cont .btnbox{padding-top:0.12rem;box-sizing: border-box;}
+		    .cont button{width:60%;height:0.6rem;display:block;margin:0 auto;border:none;outline:none;background:#F7675C;border-radius:0.1rem;color:#fff;}
+		    textarea{height:1.6rem;width:4.50rem;border:none;line-height:0.86rem;float:left;outline: none}
+		    .zfbox{text-align:center;}
+		    .zfbox>p{line-height:0.6rem;}
+		    
+		    .codezf{background: rgb(254,125,29);height:6rem;padding-top:2rem;}
+		    .codezf img{width:3.4rem;}
+		    .footer{font-size:0.24rem;height:0.96rem;padding:0.1rem;box-sizing: border-box;background:#fff;position:fixed;bottom: 0;width:100%;}
+		    .footer ul li{float:left;width:33.3%;text-align:center;}
+		    .footer ul li img{height:0.37rem;}
+		    .footer ul li span{display:block;color:#cacaca;margin-top:0.02rem}
+		    .footer .act{color:#F7675C;}
+		</style>
+	</head>
+	<body>
+		<div id="chongzhi">
+			<div class="header">
+				<h1>充值</h1>
+				<span class="backicon"></span>
+			</div>
+			<div class="main">
+				<div class="cont">
+					<ul>
+						<li><span>充值金额：</span><input type="text" placeholder="充值的金额" v-model="czmoney"/></li>
+						<li class="bz"><span>备注信息：</span><textarea placeholder="充值方式的信息方便核实" v-model="beizhu"></textarea></li>
+						<li class="btnbox"><button @tap="sub">提交</button></li>
+					</ul>
+					<div class="zfbox">
+						<p>请先截屏支付，再填写充值信息，提交审核</p>
+						<div class="codezf">
+							<img src="img/code.jpg" alt="" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--<div class="footer">
+				<ul>
+					<li><img src="img/home01.png" alt="" /><span class="act">千易国际</span></li>
+					<li @tap="jumptz"><img src="img/tongz.png" alt="" /><span>千易通证</span></li>
+					<li @tap="jumpper"><img src="img/person.png" alt="" /><span>个人中心</span></li>
+				</ul>
+			</div>-->
+		</div>
+		<script>
+			new Vue({
+				el:"#chongzhi",
+				data:{
+					czmoney:"",
+					uname:"",
+					uphone:"",
+					beizhu:"",
+					perInfo:""
+				},
+				methods:{
+					
+					sub:function(){
+						this.$http.post(domain+"/api/app/depositAudit",{
+					      	money:this.czmoney,
+					      	name:this.perInfo.name,
+					      	phone:this.perInfo.phone,
+					      	remark:this.beizhu
+					      },{emulateJSON:true}).then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res.data.errorCode)
+				                if(res.data.errorCode==0){
+				                	mui.toast("提交成功！")
+				                }else{
+				                	mui.toast(res.data.errorMsg) ;
+				                }
+				            },function (res) {
+				            // 处理失败的结果
+				            mui.toast("发生未知错误")
+				            }
+				        ) 
+					}
+				},
+				created:function(){ 
+					this.$http.get(domain+"/api/app/userData").then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res)
+				                if(res.data.errorCode==0){
+				                	this.perInfo=res.data.result
+				                }
+				            },function (res) {
+				            // 处理失败的结果
+				            //alert(res) 
+				            }
+				        ) 
+				}
+			})
+		</script>
+	</body>
+</html>

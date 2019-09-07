@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			html{background:#f3f3f3;padding-bottom:1rem;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+		    .main{font-size:0.28rem;}
+		    #main_content img{width:100%;}
+		    #main_content p a{color:#007bff;white-space: normal;width:100%;display:inline-block;font-size:16px;line-height:20px;word-wrap: break-word; 
+word-break: normal;}
+		    #main_content p{height:auto;white-space: normal;width:100%;font-size:0.3rem;word-wrap: break-word; 
+word-break: normal;}
+		    .footer{font-size:0.24rem;height:0.96rem;padding:0.1rem;box-sizing: border-box;background:#fff;position:fixed;bottom: 0;width:100%;}
+		    .footer ul li{float:left;width:33.3%;text-align:center;}
+		    .footer ul li img{height:0.37rem;}
+		    .footer ul li span{display:block;color:#cacaca;margin-top:0.02rem}
+		    .footer .act{color:#F7675C;}
+		</style>
+	</head>
+	<body>
+		<div id="qytz">
+		    <div class="header">
+				<h1>千易基金</h1>
+				<span class="backicon"></span>
+			</div>
+			<div class="content" id="main_content" v-html="qyinfo.content">
+	             <!--<div class="ttf" style="padding: 10px;color:#FFF;background:#353537;" id="ddd">
+	                <p>
+	                	<img title="1554946468515941.png" alt="cc32872978d31df25566b23468ea935.png" src="img/1554946468515941.png">
+	                	<img title="1554946484915849.png" alt="8bada5a102bcfd2ef7b8a5ca1d3c136.png" src="img/1554946484915849.png">
+	                	<img title="1554946548669271.png" alt="698842ca8d5d2851e8c39c6bcae0008.png" src="img/1554946548669271.png">
+	                	<img title="1554946565260112.png" alt="8dbd3431dbf0bf3dfa93162b4b039f9.png" src="img/1554946565260112.png">
+	                	<img title="1554946711116262.png" alt="853ba436bd364a6b7c36de1c6746571.png" src="img/1554946711116262.png">
+	                </p>
+	                <p><span style="color: rgb(0, 0, 0);"><br></span></p> 
+	                <p><span style="color: rgb(255, 255, 255); "><br></span></p>
+	                <p><span style="color: rgb(255, 255, 255);">区块链查询地址</span></p>
+	                <p><span style="color: rgb(255, 255, 255);">&nbsp;</span></p>
+	                <p><span><a href="https://etherscan.io/token/0x0961fee872a3b8bd6aaa4e6e19d3c724e867a84e" target="_self">https://etherscan.io/token/0x0961fee872a3b8bd6aaa4e6e19d3c724e867a84e</a></span></p>
+	                <p><span style="color: rgb(255, 255, 255);"><br></span></p>
+	                <p><span style="color: rgb(255, 255, 255);"><br></span></p>
+	                <p><span style="color: rgb(255, 255, 255);"><span style="color: rgb(255, 255, 255);">&nbsp;</span></span></p>
+	                <p><img title="1554946847875271.png" alt="40db627141b03a7f7977c6435da5bcf.png" src="img/1554946847875271.png"></p>
+	             </div>-->
+	        </div>	
+	        <div class="footer">
+				<ul>
+					<li @tap="jumphome"><img src="img/home.png" alt="" /><span>千易国际</span></li>
+					<li><img src="img/tongz01.png" alt="" /><span class="act">千易通证</span></li>
+					<li @tap="jumpper"><img src="img/person.png" alt="" /><span>个人中心</span></li>
+				</ul>
+			</div>
+		</div>
+		<script>
+		
+	   		new Vue({
+		    	el:"#qytz",
+		    	data:{
+		    		qyinfo:""
+		    	},
+		    	methods:{
+		    		jumphome:function(zqIndex){
+		    			openurl("home")
+		    		},
+		    		jumpper:function(){
+		    			openurl("personal")
+		    		}
+		    	},
+		    	updated:function(){
+					
+				},
+				created:function(){
+					this.$http.get(domain+"/api/app/politiList").then(
+			            function (res) {
+			                // 处理成功的结果
+			                console.log(res)
+			                if(res.data.errorCode==0){
+			                	this.qyinfo=res.data.result
+			                }
+			            },function (res) {
+			            // 处理失败的结果
+			            //alert(res) 
+			            }
+			        ) 
+				},
+				mounted:function(){
+					
+				}
+	   		});
+		</script>
+	</body>
+</html>

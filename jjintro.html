@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<link rel="stylesheet" href="css/home.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			html{background:#353537;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+		    .main{font-size:0.3rem;height:100%;position:absolute;}
+		    .main p{line-height:0.4rem;}
+		    .ttf p{color:#fff !important;}
+		</style>
+	</head>
+	<body>
+		<div id="jjintro">
+		    <div class="header">
+				<h1>基金介绍</h1>
+				<span class="backicon"></span>
+			</div>
+			<div class="main">
+				<div class="ttf" style="padding: 0.3rem;color:#FFF;" id="ddd" v-html="jjintro.content">
+	                <!--<p>&nbsp; &nbsp; &nbsp; &nbsp; 千易基金是千易国际联盟针对所有联盟企业和自治社区推出的创业组合基金，未来会推出千易理财的相关基金项目，涵盖企业增值、天使创投等投资项目，未来会给大家带来很多的价值投资理财产品。</p>
+	                <p><br></p>
+	                <p>&nbsp; &nbsp; &nbsp; &nbsp; 基金介绍：千易基金的设立，是为了保护所有节点社区成员的利益，解决现有客户账户内零钱存放的问题，即可以存放小额千易通证QYBC，又可以持币生息，让所有客户更便利的实现财富增长！</p>
+	                <p><br></p>
+	                <p>具体规则如下：</p>
+	                <p><br></p>
+	                <p>1、基金额度需大于等于100枚QYBC通证，每日产生千分之三通证生息；</p>
+	                <p><br></p>
+	                <p>2、千易基金不设立提现功能，需转出至钱包方可提现，转入转出均为秒到；</p><p><br></p><p>3、千易基金为稳定增长基金，可增加通证数量，是节点社区成员权益证明的首个应用；</p>
+	                <p><br></p>
+	                <p>4、未来千易基金将推出更多应用场景提供大家选择，为大家带来更丰厚的收益，敬请期待……</p>
+	                <p><br></p>            -->
+				</div>
+			</div>	
+		</div>
+		<script>
+			new Vue({
+				el:"#jjintro",
+				data:{
+					jjintro:""
+				},
+				methods:{
+					
+				},
+				created:function(){
+					this.$http.get(domain+"/api/app/fundList").then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res)
+				                if(res.data.errorCode==0){
+				                	this.jjintro=res.data.result
+				                }
+				            },function (res) {
+				            // 处理失败的结果
+				            //alert(res) 
+				            }
+				        ) 
+				}
+			})
+		</script>
+	</body>
+</html>

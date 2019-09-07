@@ -1,0 +1,38 @@
+* {margin: 0;padding: 0;/*	font-family: "微软雅黑";*/font-family: "Gotham", Helvetica, Arial, PingFangSC-Regular, "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;}
+ul,li{list-style: none;}
+a{text-decoration: none;color:#333;}
+i{font-style: normal;}
+.fl{float:left;}
+.fr{float:right;}
+input,button{outline: none;}
+/* 320 */
+@media screen and (min-width:320px) {
+	html {font-size:42.6px}
+}
+/* 360 */
+@media screen and (min-width:360px) {
+	html {font-size:48px}
+}
+/* 375 */
+@media screen and (min-width:375px){
+	html {font-size: 50px}
+}
+/* 412 */
+@media screen and (min-width:412px) {
+	html {font-size:54.9px}
+}
+/* 414 */
+@media screen and (min-width:414px){
+	html {font-size: 55.2px}
+}
+@media screen and (min-width:750px) {
+	html {font-size: 100px}
+}
+/* 768 */
+@media screen and (min-width:768px) {
+	html {font-size: 102.4px} 
+}
+/* 1024 */
+@media screen and (min-width:1024px) {
+	html {font-size:136.5px}
+}

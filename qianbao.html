@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<link rel="stylesheet" href="css/home.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			html{background:#f3f3f3;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+			.allbuy{height:2.4rem;background:#F7675C;text-align:center;color:#fff;}
+			.scan{background:url(img/scan.png) no-repeat right center;width:0.32rem;height:100%;display:block;position: absolute;right:0.3rem;top:0;background-size:0.32rem 0.32rem;}
+			.allbuy p{font-size:0.26rem;padding-top:0.63rem}
+			.allbuy h3{font-size:0.5432rem;margin-top:0.2rem;}
+			.main{font-size:0.28rem;padding:0.1rem 0 2.7rem 0;}
+			.main ul li{background: #fff;height:0.8rem;line-height:0.8rem;padding-left:0.3rem;border-bottom:1px solid #f3f3f3;}
+			.main ul li img{width:0.36rem;vertical-align: middle;}
+			.main ul li i{float:right;width:14px;height:100%;margin-right:0.3rem;background:url(img/arrow-right.png) no-repeat center center;background-size:0.13rem 0.22rem;}
+			.main ul{margin-top:0.1rem;}
+		</style>
+	</head>
+	<body>
+		<div id="qianbao">	
+			<div class="header">
+				<h1>消费钱包</h1>
+				<span class="backicon"></span>
+				<span class="scan"></span>
+			</div>
+			<div class="allbuy">
+				<p>消费余额(QYBC)</p>
+				<h3>{{perInfo.cons_balance | addZero}}</h3>
+			</div>
+			<div class="main">
+				<ul>
+					<li @tap="jumpzr"><img src="img/qb_03.png"/><a href="javascript:;"> 转入消费钱包<i></i></a></li>
+					<li @tap="jumptx"><img src="img/qb_06.png"/><a href="javascript:;"> 消费钱包提现<i></i></a></li>
+					<li @tap="jumpcode"><img src="img/qb_08.png"/><a href="javascript:;"> 收款码转账<i></i></a></li>
+					<li @tap="jumpjl"><img src="img/qb_10.png"/><a href="javascript:;"> 消费钱包记录<i></i></a></li>
+					<li @tap="jumpsj"><img src="img/qb_12.png"/><a href="javascript:;"> 转给商家<i></i></a></li>	
+				</ul>
+			</div>
+		</div>
+		<script>
+			new Vue({
+				el:"#qianbao",
+				data:{
+					perInfo:""
+				},
+				methods:{
+					jumpzr:function(){
+						openurl("zhuanru")
+					},
+					jumptx:function(){
+						openurl("getmoney")
+					},
+					jumpcode:function(){ 
+						openurl("codeRec")
+					},
+					jumpjl:function(){
+						openurl("xfjl")
+					},
+					jumpsj:function(){
+						openurl("putcompy")
+					}
+				},
+				created:function(){
+					this.$http.get(domain+"/api/app/userData").then(
+			            function (res) {
+			                // 处理成功的结果
+			                if(res.data.errorCode==0){
+			                	this.perInfo=res.data.result
+			                }
+			            },function (res) {
+			            // 处理失败的结果
+			            //alert(res) 
+			            }
+			        ) 
+				},
+				mounted:function(){
+					
+				}
+			})
+		</script>
+	</body>
+</html>

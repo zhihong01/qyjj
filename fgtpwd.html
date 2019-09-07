@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<link rel="stylesheet" href="css/home.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<!--<script type="text/javascript" src="js/axios.js"></script>-->
+		<script type="text/javascript" src="js/basic.js"></script> 
+		<style>
+			html{background:#f3f3f3;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+		    .main{font-size:0.28rem;}
+		    .main .cont li{height:0.87rem;line-height:0.87rem;padding:0 0.3rem;background:#fff;border-bottom: 1px solid #f3f3f3;}
+		    .main .cont li span{width:1.7rem;display: block;float:left;}
+		    .alter-sub{text-align:center;margin:0.8rem;}
+		    .alter-sub button{width:4.72rem;height:0.8rem;color:#fff;background: #F7675C;border:0;outline: none;border-radius: 0.1rem;font-size:0.3rem;}
+		    .main .cont input{height:0.86rem;border:none;line-height:0.86rem;margin-left:0.1rem;float:left;}
+		    .getcode{color:#F7675C;float:right;border:none;background:#fff;outline:none;height:0.86rem;line-height:0.87rem;}
+		    .codenum{width:2rem;}
+		</style>
+	</head>
+	<body>
+		<div id="fgtpwd">
+		    <div class="header">
+				<h1>忘记密码</h1>
+				<span class="backicon"></span>
+			</div>
+			<div class="main">
+				<div class="cont">
+					<ul>
+						<li><span>手机号：</span><input type="text" placeholder="请输入绑定的手机号" v-model="ophone"/></li>
+						<li><span>短信验证码：</span><input type="text" placeholder="请输入验证码" v-model="codemsg" class="codenum" /><button class="getcode" @tap="getcode1" :disabled="flag">{{getcode}}</button></li>
+						<li><span>新登录密码：</span><input type="password" placeholder="请输入新密码" v-model="npwd"/></li>
+						<li><span>确认新密码：</span><input type="password" placeholder="请再次输入新密码" v-model="ejpwd"/></li>
+					</ul>
+					<div class="alter-sub">
+						<button @tap="sub">提交</button>
+					</div>
+				</div>
+			</div>	
+		</div>
+		<script>
+			new Vue({
+				el:"#fgtpwd",
+				data:{
+					ophone:"",
+					npwd:"",
+					codemsg:"",
+					ejpwd:"",
+					curttime:120,
+					getcode:"获取验证码",
+					flag:false
+					
+				},
+				methods:{
+					getcode1:function(){
+						//const axios = require('axios') 
+						var reg=/^1(3|4|5|7|8|9)\d{9}$/;
+						var that=this;
+						if(!reg.test(this.ophone)){
+							mui.toast("手机号格式错误！") ;
+						}else{
+							this.$http.get(domain+"/api/login/sendCode?phone="+this.ophone).then(
+					            function (res) {
+					                // 处理成功的结果
+					                console.log(res)
+					                //alert(res.data.errorCode) 
+					                if(res.data.errorCode==0){
+					                	mui.toast("发送成功！") ;
+					                	var timer=setInterval(function(){
+											that.curttime--;
+											that.getcode="倒计时"+that.curttime+"s";
+											that.flag=true;
+											if(that.curttime<=0){
+												clearInterval(timer);
+												that.curttime=120;
+												that.getcode="获取验证码";
+												that.flag=false;
+											}
+										},1000) 
+					                }else{
+					                	mui.toast(res.data.errorMsg);
+					                }
+					                
+					            },function (res) {
+					            // 处理失败的结果
+					            //alert(res) 
+					            }
+					        )  
+					        
+						}
+						
+						
+					},
+					sub:function(){
+						this.$http.post(domain+"/api/login/forgetPassword",{
+					      	phone:this.ophone,
+					      	code:this.codemsg,
+					      	new_password:this.npwd,
+					      	again_password:this.ejpwd
+					      },{emulateJSON:true}).then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res.data.errorCode)
+				                if(res.data.errorCode==0){
+				                	mui.toast("修改成功，请重新登录！")
+				                }else{
+				                	mui.toast(res.data.errorMsg) ;
+				                }
+				            },function (res) {
+				            // 处理失败的结果
+				            mui.toast("发生未知错误")
+				            }
+				        ) 
+					}
+				},
+				created:function(){ 
+//					mui.plusReady(function(){
+//						var self=plus.webview.currentWebview();
+//						//alert(self.current)
+//					})
+				}
+			})
+		</script>
+	</body>
+</html>

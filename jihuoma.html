@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<link rel="stylesheet" href="css/home.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			html{background:#f3f3f3;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+		    .main{font-size:0.28rem;}
+			.main ul li{background: #fff;height:0.8rem;line-height:0.8rem;padding-left:0.3rem;border-bottom:1px solid #f3f3f3;}
+			.main ul li img{width:0.36rem;vertical-align: middle;}
+			.main ul li i{float:right;width:14px;height:100%;margin-right:0.3rem;background:url(img/arrow-right.png) no-repeat center center;background-size:0.13rem 0.22rem;}
+		</style>
+	</head>
+	<body>
+		<div id="jhm">	
+			<div class="header">
+				<h1>激活码</h1>
+				<span class="backicon"></span>
+			</div>
+			<div class="main">
+				<ul>
+					<li @tap="jumpjh">激活会员<i></i></a></li>
+					<li @tap="jumphz">互转<i></i></a></li>
+				</ul>
+			</div>
+		</div>
+		<script>
+			new Vue({
+				el:"#jhm",
+				data:{},
+				methods:{
+					jumpjh:function(){
+						openurl("jihuo")
+					},
+					jumphz:function(){
+						openurl("huzhuan")
+					}
+				},
+				created:function(){},
+				mounted:function(){
+					
+				}
+				
+			})
+		</script>
+	</body>
+</html>

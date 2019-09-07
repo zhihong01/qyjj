@@ -1,0 +1,98 @@
+{
+	"login.html": {
+		"refer": [
+			"home.html",
+			"fgtpwd.html",
+			"register.html"
+		],
+		"resources": []
+	},
+	"home.html": {
+		"refer": [
+			"qyjj.html",
+			"qianbao.html",
+			"tgcode.html",
+			"xtgg.html",
+			"goodsInfo.html",
+			"gdzq.html",
+			"personal.html",
+			"qytz.html"
+		],
+		"resources": []
+	},
+	"gdzq.html": {
+		"refer": [
+			"goodsInfo.html"
+		],
+		"resources": []
+	},
+	"personal.html": {
+		"refer": [
+			"allcount.html",
+			"getmoney.html",
+			"jyjl.html",
+			"zhuanru.html",
+			"xfjl.html",
+			"jihuoma.html",
+			"yjjl.html",
+			"alter-msg.html",
+			"getbi.html",
+			"myorder.html",
+			"home.html",
+			"yetx.html",
+			"chongzhi.html",
+			"qytz.html",
+			"qbjl.html",
+			"member.html",
+			"czjl.html"
+		],
+		"resources": []
+	},
+	"jihuoma.html": {
+		"refer": [
+			"jihuo.html",
+			"huzhuan.html"
+		],
+		"resources": []
+	},
+	"myorder.html": {
+		"refer": [
+			"orderdel.html"
+		],
+		"resources": []
+	},
+	"qianbao.html": {
+		"refer": [
+			"getmoney.html",
+			"zhuanru.html",
+			"codeRec.html",
+			"xfjl.html",
+			"putcompy.html"
+		],
+		"resources": []
+	},
+	"qyjj.html": {
+		"refer": [
+			"syjl.html",
+			"zhuanru.html",
+			"jjintro.html",
+			"zhuanchu.html",
+			"qyzr.html",
+			"qyzc.html",
+			"cyjj.html"
+		],
+		"resources": []
+	},
+	"xtgg.html": {
+		"refer": [
+			"noticedel.html"
+		],
+		"resources": []
+	},
+	"qytz.html": {
+		"refer": [
+			"home.html",
+			"personal.html"
+		]
+	}
+}

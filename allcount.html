@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<link rel="stylesheet" href="css/home.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			html{background:#f3f3f3;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+		    .u-mem{height:2.16rem;background:#F7675C;color:#fff;box-sizing: border-box;padding-top:0.5rem;font-size:0.28rem;}
+		    .u-mem img{width:0.95rem;border:0.05rem solid #fff;border-radius:50%;margin-left:0.58rem;vertical-align: middle;}
+		    .main{font-size:0.26rem;background:#fff;margin-top:2.26rem;}
+		    .u-mem ul{margin-left:0.2rem;padding-top:0.1rem ;}
+		    .u-mem li{line-height:0.47rem}
+		    .countinfo-top{height:1.32rem;border-bottom:1px solid #f3f3f3;padding-left:0.3rem;}
+		    .countinfo-top span{display:block;width:1.7rem;padding:0.3rem 0;box-sizing: border-box;text-align:center;color:#999;}
+		    .countinfo-top span i{display:block;color:#333;font-size:0.36rem;line-height:0.5rem;height: 0.45rem;}
+		    .countinfo-del{overflow:hidden;width:100%;}
+		    .countinfo-del li{height:1.32rem;border-bottom:1px solid #f3f3f3;padding:0.3rem;float:left;width:50%;box-sizing: border-box;}
+		    .countinfo-del li i{display:block;color:#999;font-size:0.3rem;line-height:0.5rem;height: 0.45rem;}
+		</style>
+	</head>
+	<body>
+		<div id="allcount">
+		    <div class="header">
+				<h1>总资产</h1>
+				<span class="backicon"></span>
+				<div class="u-mem">
+					<img src="img/logo.png" alt="" class="fl"/>
+					<ul class="fl">
+						<li>会员姓名：<span>{{perInfo.name}}</span></li>
+						<li>会员账号：<span>{{perInfo.phone}}</span></li>
+					</ul>
+				</div>
+			</div>
+			<div class="main">
+				<div class="countinfo-top">
+					<span class="fl">总资产(QYBC)<i>{{perInfo.all_balance | numFilter}}</i></span>
+					<span class="fr">昨日收益<i>{{perInfo.yes_balance | numFilter}}</i></span>
+				</div>
+				<ul class="countinfo-del">
+					<li>余额<i>{{perInfo.balance | numFilter}}</i></li>
+					<li>千易基金<i>{{perInfo.qy_balance | numFilter}}</i></li>
+					<li>理财<i>{{perInfo.conduct_balance | numFilter}}</i></li>
+					<li>消费钱包<i>{{perInfo.cons_balance | numFilter}}</i></li>
+				</ul>
+			</div>	
+		</div>
+		<script>
+			new Vue({
+				el:"#allcount",
+				data:{
+					perInfo:""
+				},
+				filters:{
+					 numFilter:function(value) {
+					    // 截取当前数据到小数点后两位
+					    var realVal = parseFloat(value).toFixed(2) 
+					    return realVal
+					  }
+				},
+				methods:{
+					
+				},
+				created:function(){
+					this.$http.get(domain+"/api/app/userData").then(
+			            function (res) {
+			                // 处理成功的结果
+			                if(res.data.errorCode==0){
+			                	this.perInfo=res.data.result
+			                }
+			            },function (res) {
+			            // 处理失败的结果
+			            //alert(res) 
+			            }
+			        ) 
+				}
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			html{background:#f3f3f3;padding-bottom: 0.96rem;}
+			.header h1{font-size:0.36rem;line-height:0.88rem;text-align:center;font-weight: normal;background:#F7675C;color:#fff;}
+			.swiper-wrapper img{width:100%;height:3.23rem;}
+		    .main{font-size:0.28rem;}  
+		    .h-nav{display:flex;justify-content: space-around;flex-wrap: nowrap;text-align:center;background:#fff;padding:0.34rem 0 0.3rem;}
+		    .h-nav img{width:0.9rem;}
+		    .h-nav span{display:block;}
+		    .goodsList,.gdgoods{padding:0.3rem 0.3rem 0 0.3rem;background:#fff;margin-top:0.1rem;}
+		    .goodsList h3,.gdgoods h3{line-height:0.6rem;}
+		    .goodsList li{overflow:hidden;margin-top:0.3rem;position: relative;padding-bottom:0.26rem;border-bottom:1px solid #f3f3f3;}
+		    .goodsList li img{width:1.48rem;height:1.34rem;}
+		    .goodsList .goodsInfo{margin-left:0.1rem;}
+		    .goodsInfo p{padding-top:0.05rem;}
+		    .goodsInfo span{display:block;color:#999;font-size:0.2rem;line-height:0.34rem;}
+		    .goodsInfo span.price{font-size: 0.26rem;font-weight:bold;color:#F7675C;margin-top:0.26rem;}
+		    .goodsList li button{position:absolute;bottom:0.45rem;background:#F7675C;border:0;outline: none;width:1.28rem;height:0.4rem;color:#fff;border-radius:0.2rem;font-size:0.2rem;right:0.3rem;}
+		    .gdgoods ul{display:flex;justify-content: flex-start;text-align:center;flex-wrap:wrap;}
+		    .gdgoods{margin-bottom:0.8rem;}
+		    .gdgoods ul li{padding:0.1rem;}
+		    .gdgoods ul img{width:1.4rem;height:1.4rem;}
+		    .gdgoods ul span{display:block;line-height:0.6rem;width:2rem;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;margin:0 auto;}
+		    .footer{font-size:0.24rem;height:0.96rem;padding:0.1rem;box-sizing: border-box;background:#fff;position:fixed;bottom: 0;width:100%;}
+		    .footer ul li{float:left;width:33.3%;text-align:center;}
+		    .footer ul li img{height:0.37rem;}
+		    .footer ul li span{display:block;color:#cacaca;margin-top:0.02rem}
+		    .footer .act{color:#F7675C;}
+		</style>
+	</head>
+	<body>
+		<div id="home">
+			<div class="header">
+				<h1>千易国际联盟QYBC</h1>
+				 <div class="swiper-container">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide" v-for="(imgs,index) in swiperImg"><img :src="imgs.url" /></div>
+						
+						<!--<div class="swiper-slide"><img src="style/img/swiper2.jpg" /></div>
+						<div class="swiper-slide"><img src="style/img/swiper1.jpg" /></div>-->
+					</div>
+					<!-- Add Pagination -->
+					<div class="swiper-pagination"></div> 
+				</div>
+			</div>
+			<div class="main">
+				<ul class="h-nav">
+					<li @tap="qiandao">
+					    <img src="img/home_13.png"/>
+					    <span>签到</span>
+					</li>
+					<li @tap="jumpjj">
+					    <img src="img/home_15.png"/>
+					    <span>千易基金</span>
+					</li>
+					<li @tap="jumpgg">
+					    <img src="img/home_06.png"/>
+					    <span>资讯</span>
+					</li>
+					<li @tap="jumptg">
+					    <img src="img/home_08.png"/>
+					    <span>推广</span>
+					</li>
+					<li @tap="jumpqb">
+					    <img src="img/home_10.png"/>
+					    <span>消费钱包</span>
+					</li>
+				</ul>
+				<div class="goodsList">
+					<h3>生活购物专区</h3>
+					<ul>
+						<li v-for="(goods,index) in goodslist" @tap="jumpdel(index)">
+							<img :src="goods.image" class="fl"/>
+							<div class="goodsInfo fl">
+								<p>{{goods.title}}</p>
+								<span class="price">价格 {{goods.price}}</span>
+								<span>库存剩余{{goods.stock_now}}</span>
+								
+							</div>
+							<button class="fr">立即购买</button>
+						</li>
+						
+					</ul>
+				</div>
+				<div class="gdgoods">
+					<h3>普通商品专区</h3>
+					<ul>
+						<li v-for="(good,index) in goodstype" @tap="jumpzq(index)"><img :src="domain+good.image"/><span>{{good.title}}</span></li>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="footer">
+				<ul>
+					<li><img src="img/home01.png" alt="" /><span class="act">千易国际</span></li>
+					<li @tap="jumptz"><img src="img/tongz.png" alt="" /><span>千易通证</span></li>
+					<li @tap="jumpper"><img src="img/person.png" alt="" /><span>个人中心</span></li>
+				</ul>
+			</div>
+		</div>
+		<script>
+	   		new Vue({
+		    	el:"#home",
+		    	data:{
+		    		goodslist:"",
+		    		domain:"",
+		    		goodstype:"",
+		    		swiperImg:""
+		    	},
+		    	methods:{ 
+		    		qiandao:function(){
+		    			this.$http.get(domain+"/api/app/sign").then(
+				            function (res) {
+				                // 处理成功的结果
+				               // console.log(res.data.errorCode)
+				               if(res.data.errorCode==0){
+				                	mui.toast("签到成功！",{duration:"long"})
+				                }else{
+				                	mui.toast(res.data.errorMsg) ;
+				                }
+				            },function (res) {
+				            // 处理失败的结果
+				            //alert(res) 
+				            }
+				        );
+		    		},
+		    		jumpjj:function(){
+		    			openurl("qyjj")
+		    		},
+		    		jumpgg:function(){
+		    			openurl("xtgg")
+		    		},
+		    		jumptg:function(){
+		    			openurl("tgcode")
+		    		},
+		    		jumpqb:function(){
+		    			openurl("qianbao")
+		    		},
+		    		jumpdel:function(gIndex){
+		    			var that=this;
+		    			localStorage.setItem("sp",1)
+		    			openurl_can("goodsInfo",that.goodslist[gIndex].id);
+		    		},
+		    		jumpzq:function(zqIndex){
+		    			var that=this;
+		    			openurl_can("gdzq",that.goodstype[zqIndex].id)
+		    		},
+		    		jumptz:function(){
+		    			openurl("qytz")
+		    			
+		    		},
+		    		jumpper:function(){
+		    			openurl("personal")
+		    		}
+		    	},
+		    	updated:function(){
+					var swiper = new Swiper('.swiper-container', {
+						spaceBetween: 30,
+						centeredSlides: true,
+						autoplay: {
+							delay: 2500,
+							disableOnInteraction: false,
+						},
+						pagination: {
+							el: '.swiper-pagination',
+							clickable: true,
+						},  
+						navigation: {
+							nextEl: '.swiper-button-next',
+							prevEl: '.swiper-button-prev',
+						},
+					});
+				},
+				created:function(){
+					this.domain=domain
+					this.$http.get(domain+"/api/app/rebateGoodList").then(
+			            function (res) {
+			                // 处理成功的结果
+			                console.log(res.data.errorCode)
+			               if(res.data.errorCode==0){
+			                	this.goodslist=res.data.result 
+			                } 
+			            },function (res) {
+			            // 处理失败的结果
+			            //alert(res) 
+			            }
+			        );
+			        this.$http.get(domain+"/api/app/normalGoodType").then(
+			            function (res) {
+			                // 处理成功的结果
+			                console.log(res.data.errorCode)
+			               if(res.data.errorCode==0){
+			                	this.goodstype=res.data.result 
+			                } 
+			            },function (res) {
+			            // 处理失败的结果
+			            //alert(res) 
+			            }
+			        );
+			        this.$http.get(domain+"/api/app/bannerList").then(
+			            function (res) {
+			                // 处理成功的结果
+			               // console.log(res.data.result[0].url)
+			               if(res.data.errorCode==0){
+			                	this.swiperImg=res.data.result 
+			                } 
+			            },function (res) {
+			            // 处理失败的结果
+			            //alert(res) 
+			            }
+			        );
+				},
+				mounted:function(){
+					mui.plusReady(function(){
+			
+			//          var wvs = plus.webview.all();//获取所有的窗口
+			//        plus.webview.close(wvs[0]);//关闭欢迎页
+			            var first = null;  
+			            mui.back=function(){
+			            if(!first){  
+			                    first = new Date().getTime();  
+			                    mui.toast('再按一次退出应用');  
+			                    setTimeout(function(){  
+			                        first = null;  
+			                    },2000);  
+			                } else {  
+			                    if(new Date().getTime() - first < 2000){  
+			                        plus.runtime.quit();
+			                        //localStorage.removeItem("custInfo");
+			                    }  
+			                }  
+			            }; 
+			        })
+	
+				}
+	   		});
+		</script>
+		
+	</body>
+</html>

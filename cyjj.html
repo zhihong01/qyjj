@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<link rel="stylesheet" href="css/home.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			html{background:#f3f3f3;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+		    .main{font-size:0.28rem;}
+		    .main .cont li{height:0.87rem;line-height:0.87rem;padding:0 0.3rem;background:#fff;border-bottom: 1px solid #f3f3f3;}
+		    .main .cont li span{width:1.5rem;display: block;float:left;}
+		    .alter-sub{text-align:center;margin:0.8rem;}
+		    .alter-sub button{width:4.72rem;height:0.8rem;color:#fff;background: #F7675C;border:0;outline: none;border-radius: 0.1rem;font-size:0.3rem;}
+		    .main .cont input{height:0.86rem;width:4.50rem;border:none;line-height:0.86rem;float:left;}
+		    .getlogo{float:right;}
+		    table{font-size:0.18rem;text-align:center;width:100%;border-collapse: collapse;border:0;}
+		    table td,table th{padding:0.1rem 0;} 
+		    .u-thead{background:#F7675C;color:#fff;}
+		    .u-thead th{border:0;}
+		    .contList:nth-child(2n-1){background:#fff;} 
+		</style>
+	</head>
+	<body>
+		<div id="cyjj">
+		    <div class="header">
+				<h1>创业投资</h1>
+				<span class="backicon"></span>
+			</div>
+			<div class="main">
+				<div class="cont">
+					<ul>
+						<li><span>剩余余额：</span><input type="text" :placeholder="perInfo.balance | addZero" readonly="readonly"/></li>
+						<li><span>数量：</span><input type="text" placeholder="请输入您要投资数量" v-model="tbnum[indx-1]" readonly="readonly"/><i class="getlogo">QYBC</i></li>
+						<li><span>二级密码：</span><input type="password" placeholder="请输入您的二级密码"  v-model="ejpwd"/></li>
+					</ul>
+					<div class="alter-sub">
+						<button @tap="subtb">提交</button>
+					</div>
+				</div>
+			</div>
+			<table border="0" cellspacing="" cellpadding="">
+				<tr class="u-thead">
+					<th>ID</th>
+					<th>总投资</th>
+					<th>利息</th>
+					<th>有效期</th>
+					<th>本金释放日期</th>
+					<th>购买时间</th>
+					<th>是否可以提现</th>
+				</tr>
+				<tr v-for="(item,index) in cyInfo" class="contList">
+					<td>{{item.uid}}</td>
+					<td>{{item.money}}</td>
+					<td>{{item.interest}}</td>
+					<td>{{item.term}}</td>
+					<td>{{item.principal_release_time}}</td>
+					<td>{{item.buy_time}}</td>
+					<td @tap="jjtx(index)">{{item.status}}</td>
+				</tr>
+				
+			</table>
+		</div>
+		<script>
+			new Vue({
+				el:"#cyjj",
+				data:{
+					perInfo:"",
+					tbm:"",
+					tbnum:[500000,1000000,2000000],
+					indx:"",
+					ejpwd:"",
+					cyInfo:""
+				},
+				methods:{
+					subtb:function(){
+						this.$http.post(domain+"/api/app/poineInsertOrder",{
+					      	type:this.indx,
+					      	pay_password:this.ejpwd
+					      },{emulateJSON:true}).then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res.data.errorCode)
+				                if(res.data.errorCode==0){
+				                	mui.toast("购买成功！")
+				                	this.$http.get(domain+"/api/app/poineOrder?type="+this.indx).then(
+							            function (res) {
+							                // 处理成功的结果
+							                console.log(res)
+							                if(res.data.errorCode==0){
+							                	this.cyInfo=res.data.result
+							                }
+							            },function (res) {
+							            // 处理失败的结果
+							            //alert(res) 
+							            }
+							        );
+				                	this.$http.get(domain+"/api/app/userData").then(
+							            function (res) {
+							                // 处理成功的结果
+							                console.log(res)
+							                if(res.data.errorCode==0){
+							                	this.perInfo=res.data.result
+							                }
+							            },function (res) {
+							            // 处理失败的结果
+							            //alert(res) 
+							            }
+							        ) 
+				                }else{
+				                	mui.toast(res.data.errorMsg) ;
+				                }
+				            },function (res) {
+				            // 处理失败的结果
+				            mui.toast("发生未知错误")
+				            }
+				        ) 
+					},
+					jjtx:function(jIndex){
+						this.$http.post(domain+"/api/app/poineInsertOrderCase",{
+					      	id:this.cyInfo[jIndex].id
+					      },{emulateJSON:true}).then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res.data.errorCode)
+				                if(res.data.errorCode==0){
+				                	mui.toast("提交成功,等待审核！")
+				                	this.$http.get(domain+"/api/app/poineOrder?type="+that.indx).then(
+							            function (res) {
+							                // 处理成功的结果
+							                console.log(res)
+							                if(res.data.errorCode==0){
+							                	this.cyInfo=res.data.result
+							                }
+							            },function (res) {
+							            // 处理失败的结果
+							            //alert(res) 
+							            } 
+							        );
+				                	
+				                }else{
+				                	mui.toast(res.data.errorMsg) ;
+				                }
+				            },function (res) {
+				            // 处理失败的结果
+				            mui.toast("发生未知错误")
+				            }
+				        ) 
+					}
+				},
+				created:function(){
+					
+					this.$http.get(domain+"/api/app/userData").then(
+				            function (res) {
+				                // 处理成功的结果
+				                console.log(res)
+				                if(res.data.errorCode==0){
+				                	this.perInfo=res.data.result
+				                }
+				            },function (res) {
+				            // 处理失败的结果
+				            //alert(res) 
+				            }
+				        ) 
+				},
+				mounted:function(){
+					var that=this;
+					mui.plusReady(function(){
+						var self=plus.webview.currentWebview();//获取页面传值
+						that.indx=self.current; 
+						that.$http.get(domain+"/api/app/poineOrder?type="+self.current).then(
+					            function (res) {
+					                // 处理成功的结果
+					                console.log(res)
+					                if(res.data.errorCode==0){
+					                	that.cyInfo=res.data.result
+					                }
+					            },function (res) {
+					            // 处理失败的结果
+					            //alert(res) 
+					            }
+					        )
+					})
+				}
+			})
+		</script>
+	</body>
+</html>

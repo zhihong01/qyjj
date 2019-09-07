@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="css/basic.css">
+		<link rel="stylesheet" href="plugin/swiper/css/swiper.min.css" />
+		<link rel="stylesheet" href="css/home.css" />
+		<script type="text/javascript" src="plugin/mui/js/mui.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="plugin/swiper/js/swiper.min.js"></script>
+		<script type="text/javascript" src="js/vue.min.js"></script>
+		<script type="text/javascript" src="js/vue-resource.js"></script>
+		<script type="text/javascript" src="js/basic.js"></script>
+		<style>
+			html{background:#f3f3f3;}
+			.header{height:0.86rem;background:#F7675C;color:#fff;box-sizing: border-box;line-height:0.86rem;position: relative;}
+			.header h1{font-size:0.32rem;text-align:center;font-weight: normal;}
+			.backicon{background:url(img/arrow-left.png) no-repeat left center;width:0.19rem;height:100%;display:block;position: absolute;left:0.3rem;top:0;background-size:0.19rem 0.35rem;}
+		    .main{font-size:0.28rem;}
+		    
+			.txlist li{background: #fff;padding:0.21rem 0.3rem;border-bottom:0.1rem solid #f3f3f3;box-sizing: border-box;overflow:hidden;}
+			.txlist li img{width:1.21rem;}
+			.txlist p{clear:both;font-size:0.24rem;color:#999;line-height:0.4rem;}
+		    .khmsg{width:3.1rem;font-size:0.26rem;}
+		    .khmsg>span{display:block;line-height:0.4rem;}
+		    .txstatus{width:3rem;text-align:right;font-size:0.26rem;color:#999;}
+		    .txstatus>span{ color:#F7675C;line-height:0.4rem;display:block;margin-bottom:0.2rem;}
+		    
+		    .fltime{font-size:0.22rem;color:#B5B5B5;}
+		    .tbm{color:#999;font-size:0.20rem;}
+		</style>
+	</head>
+	<body>
+		<div id="yjjl">	
+			<div class="header">
+				<h1>充值记录</h1>
+				<span class="backicon"></span>
+			</div>
+			<div class="main">
+				<ul class="txlist">
+					<li v-for="(tx,index) in txlist">
+						<div class="fl khmsg">
+							<span>姓名：{{tx.name}}</span>
+							<span>数量：{{tx.money}}</span>
+							<span>手机号：{{tx.phone}}</span>
+						</div>
+						<div class="txstatus fr">
+							<span>{{tx.status}}</span>
+							<i>{{tx.create_at}}</i>
+							
+						</div>
+						<p v-if="tx.reason!=null">驳回内容：{{tx.reason}}</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<script>
+			new Vue({
+				el:"#yjjl",
+				data:{
+					flag:1,
+					txlist:"",
+					tblist:""
+				},
+				methods:{
+					
+				},
+				created:function(){
+					this.$http.get(domain+"/api/app/czjl").then(
+			            function (res) {
+			                // 处理成功的结果
+			                console.log(res)
+			                if(res.data.errorCode==0){
+			                	this.txlist=res.data.result
+			                }
+			            },function (res) {
+			            // 处理失败的结果
+			            //alert(res) 
+			            }
+			        );
+			        
+				}
+			})
+		</script>
+	</body>
+</html>
